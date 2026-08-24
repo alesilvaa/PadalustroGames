@@ -18,7 +18,7 @@ The site presents the studio, upcoming games **MewClicker** and **Disco Infierno
 Requirements: Node.js 22.13 or newer.
 
 ```bash
-npm run install:site
+npm install
 npm run dev
 ```
 
@@ -35,11 +35,9 @@ npm run start
 
 ```text
 Padalustro/
-├── package.json        # Root development commands
-└── site/
-    ├── app/            # Page, metadata and styles
-    ├── public/         # Optimized game and studio assets
-    └── package.json    # Website dependencies
+├── app/                # Page, metadata and styles
+├── public/             # Optimized game and studio assets
+└── package.json        # Dependencies and development commands
 ```
 
 ## Technology
@@ -48,8 +46,8 @@ React 19, Next.js App Router, Tailwind CSS and TypeScript.
 
 ## Deploy on Vercel
 
-When importing the repository in Vercel, set the **Root Directory** to `site`.
-Vercel will then detect Next.js and use the native production build automatically.
+Import the repository with the default Root Directory. Vercel detects Next.js
+at the repository root and uses the native production build automatically.
 
 ---
 
