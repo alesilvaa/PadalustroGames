@@ -25,8 +25,8 @@ const translations = {
       title: 'Our next games',
       intro: 'Two games with completely different energies, built with the same attention to every interaction.',
       status: 'ACTIVE DEVELOPMENT',
-      mewBody: 'Collect unusual cats, unlock new variants and let your helper drone keep the operation moving.',
-      infernoBody: 'A fast arcade game where every bounce can save your run—or send everything straight into chaos.',
+      mewBody: 'A web game where you collect unusual cats, unlock new variants and let your helper drone keep the operation moving.',
+      infernoBody: 'A fast web arcade game where every bounce can save your run—or send everything straight into chaos.',
       details: 'GAME DETAILS',
       progress: 'WORK IN PROGRESS',
     },
@@ -91,8 +91,8 @@ const translations = {
       title: 'Nuestros próximos juegos',
       intro: 'Dos juegos con energías completamente distintas y el mismo cuidado por cada interacción.',
       status: 'DESARROLLO ACTIVO',
-      mewBody: 'Coleccioná gatos inusuales, desbloqueá variantes y dejá que tu dron mantenga la operación en movimiento.',
-      infernoBody: 'Un arcade rápido donde cada rebote puede salvar la partida o mandarlo todo directo al caos.',
+      mewBody: 'Un juego web donde coleccionás gatos inusuales, desbloqueás variantes y dejás que tu dron mantenga la operación en movimiento.',
+      infernoBody: 'Un arcade web rápido donde cada rebote puede salvar la partida o mandarlo todo directo al caos.',
       details: 'DETALLES DEL JUEGO',
       progress: 'TRABAJO EN PROGRESO',
     },
@@ -157,8 +157,8 @@ const translations = {
       title: 'Nossos próximos jogos',
       intro: 'Dois jogos com energias completamente diferentes e o mesmo cuidado em cada interação.',
       status: 'DESENVOLVIMENTO ATIVO',
-      mewBody: 'Colecione gatos incomuns, desbloqueie variantes e deixe seu drone manter a operação em movimento.',
-      infernoBody: 'Um arcade rápido onde cada quique pode salvar a partida ou mandar tudo direto para o caos.',
+      mewBody: 'Um jogo web onde você coleciona gatos incomuns, desbloqueia variantes e deixa seu drone manter a operação em movimento.',
+      infernoBody: 'Um arcade web rápido onde cada quique pode salvar a partida ou mandar tudo direto para o caos.',
       details: 'DETALHES DO JOGO',
       progress: 'TRABALHO EM ANDAMENTO',
     },
@@ -216,7 +216,7 @@ const projects = [
 const team = [
   { name: 'Alejandro Acosta', image: '/images/alejandro-acosta.jpg', accent: 'yellow' },
   { name: 'Juanse Colina', image: '/images/juanse-colina.jpeg', accent: 'cyan' },
-  { name: 'Francisco Armoa', image: '/images/francisco-armoa.png', accent: 'coral' },
+  { name: 'Francisco Armoa', image: '/images/francisco-armoa.webp', accent: 'coral' },
 ];
 
 export default function Home() {
@@ -331,20 +331,30 @@ export default function Home() {
         </div>
 
         <div className="hero-brand-stage" aria-label="Padalustro Games">
-          <div className="brand-stage-top"><span>PADALUSTRO_CREATIVE_ENGINE</span><span className="running"><i /> ONLINE</span></div>
+          <div className="brand-stage-top"><span>PADALUSTRO_GAME_SYSTEM</span><span className="running"><i /> PLAYER_01 ONLINE</span></div>
           <div className="brand-stage-body">
             <div className="stage-grid" aria-hidden="true" />
             <div className="stage-orbit" aria-hidden="true" />
+            <div className="stage-energy" aria-hidden="true" />
+            <div className="stage-particles" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
             <div className="stage-logo">
               <Image src="/images/logo-padalustro.webp" alt="Padalustro Games" width={852} height={972} priority />
             </div>
+            <div className="stage-roster">
+              <span>CHARACTER ROSTER // READY</span>
+              <Image className="stage-cats" src="/images/mewclicker-cats-row.webp" alt="" width={3164} height={820} priority />
+            </div>
+            <Image className="stage-shark" src="/images/pez.png" alt="" width={781} height={482} priority />
             <Image className="stage-drone" src="/images/dron-helper.webp" alt="" width={1266} height={994} priority />
             <Image className="stage-disc" src="/images/disco-player.png" alt="" width={568} height={538} priority />
-            <Image className="stage-cat" src="/images/michi.jpeg" alt="" width={439} height={505} priority />
-            <div className="stage-label label-a">IDEA → PROTOTYPE</div>
-            <div className="stage-label label-b">PLAY → REFINE</div>
+            <div className="stage-label label-a">STUDIO MODE // ACTIVE</div>
+            <a className="stage-start" href="#games">
+              <span className="stage-start-icon">▶</span>
+              <span className="stage-start-copy"><small>ENTER THE STUDIO</small><strong>PRESS START</strong></span>
+              <b>↘</b>
+            </a>
           </div>
-          <div className="brand-stage-bottom"><span>GAMES MADE IN PARAGUAY</span><span>EST. 2026</span></div>
+          <div className="brand-stage-bottom"><span>INDEPENDENT GAME STUDIO // PARAGUAY</span><span>WEB · MOBILE · PC</span></div>
         </div>
       </section>
 
@@ -371,7 +381,7 @@ export default function Home() {
             <div className="game-info">
               <div><small>{t.games.details}</small><h3>MewClicker</h3></div>
               <p>{t.games.mewBody}</p>
-              <div className="game-tags"><span>CLICKER</span><span>COLLECTION</span><span>MOBILE</span></div>
+              <div className="game-tags"><span>CLICKER</span><span>COLLECTION</span><span>WEB</span></div>
             </div>
             <div className="game-progress"><i /><span>{t.games.progress}</span></div>
           </article>
@@ -398,7 +408,7 @@ export default function Home() {
             <div className="game-info">
               <div><small>{t.games.details}</small><h3>Disco Infierno</h3></div>
               <p>{t.games.infernoBody}</p>
-              <div className="game-tags"><span>ARCADE</span><span>ACTION</span><span>PHYSICS</span></div>
+              <div className="game-tags"><span>ARCADE</span><span>ACTION</span><span>WEB</span></div>
             </div>
             <div className="game-progress"><i /><span>{t.games.progress}</span></div>
           </article>

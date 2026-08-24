@@ -44,7 +44,12 @@ Padalustro/
 
 ## Technology
 
-React 19, Next.js-compatible App Router, Vinext, Vite and TypeScript.
+React 19, Next.js App Router, Tailwind CSS and TypeScript.
+
+## Deploy on Vercel
+
+When importing the repository in Vercel, set the **Root Directory** to `site`.
+Vercel will then detect Next.js and use the native production build automatically.
 
 ---
 
