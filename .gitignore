@@ -1,0 +1,22 @@
+.DS_Store
+**/.DS_Store
+
+# Local source assets duplicated in site/public
+/Images/
+
+# Dependencies and generated output
+/site/node_modules/
+/site/.next/
+/site/.vinext/
+/site/dist/
+/site/out/
+/site/.wrangler/
+
+# Local configuration
+/site/.env*
+*.pem
+
+# Logs
+*.log
+npm-debug.log*
+
