@@ -267,12 +267,26 @@ export default function Home() {
     }
 
     const progress = document.querySelector<HTMLElement>('.scroll-progress');
+    const hero = document.querySelector<HTMLElement>('.hero');
+    const heroCopy = document.querySelector<HTMLElement>('.hero-copy');
+    const heroCard = document.querySelector<HTMLElement>('.hero-logo-card');
+    const heroGrid = document.querySelector<HTMLElement>('.hero-grid');
     let frame = 0;
     const updateProgress = () => {
       frame = 0;
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
       const ratio = scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0;
       if (progress) progress.style.transform = `scaleX(${ratio})`;
+
+      if (hero && !reducedMotion) {
+        const heroRatio = Math.min(Math.max(window.scrollY / Math.max(hero.offsetHeight * 0.82, 1), 0), 1);
+        const visibility = Math.max(1 - heroRatio * 0.34, 0.66);
+        heroCopy?.style.setProperty('--hero-scroll-y', `${heroRatio * -18}px`);
+        heroCopy?.style.setProperty('--hero-visibility', `${visibility}`);
+        heroCard?.style.setProperty('--hero-scroll-y', `${heroRatio * -9}px`);
+        heroCard?.style.setProperty('--hero-visibility', `${visibility}`);
+        heroGrid?.style.setProperty('--hero-grid-y', `${heroRatio * 18}px`);
+      }
     };
     const handleScroll = () => {
       if (!frame) frame = window.requestAnimationFrame(updateProgress);
@@ -282,11 +296,56 @@ export default function Home() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
 
+    let pointerFrame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const updatePointer = () => {
+      pointerFrame = 0;
+      if (!heroCard) return;
+      heroCard.style.setProperty('--tilt-x', `${pointerY * -2.2}deg`);
+      heroCard.style.setProperty('--tilt-y', `${pointerX * 2.6}deg`);
+      heroCard.style.setProperty('--logo-x', `${pointerX * 9}px`);
+      heroCard.style.setProperty('--logo-y', `${pointerY * 7}px`);
+      heroCard.style.setProperty('--aura-x', `${pointerX * 3}px`);
+      heroCard.style.setProperty('--aura-y', `${pointerY * 2.5}px`);
+      heroCard.style.setProperty('--light-x', `${50 + pointerX * 16}%`);
+      heroCard.style.setProperty('--light-y', `${48 + pointerY * 14}%`);
+    };
+    const handlePointerMove = (event: PointerEvent) => {
+      if (!heroCard) return;
+      const rect = heroCard.getBoundingClientRect();
+      pointerX = Math.max(-1, Math.min((event.clientX - rect.left) / rect.width * 2 - 1, 1));
+      pointerY = Math.max(-1, Math.min((event.clientY - rect.top) / rect.height * 2 - 1, 1));
+      if (!pointerFrame) pointerFrame = window.requestAnimationFrame(updatePointer);
+    };
+    const resetPointer = () => {
+      if (!heroCard) return;
+      pointerX = 0;
+      pointerY = 0;
+      heroCard.style.setProperty('--tilt-x', '0deg');
+      heroCard.style.setProperty('--tilt-y', '0deg');
+      heroCard.style.setProperty('--logo-x', '0px');
+      heroCard.style.setProperty('--logo-y', '0px');
+      heroCard.style.setProperty('--aura-x', '0px');
+      heroCard.style.setProperty('--aura-y', '0px');
+      heroCard.style.setProperty('--light-x', '50%');
+      heroCard.style.setProperty('--light-y', '48%');
+    };
+
+    if (heroCard && canHover && !reducedMotion) {
+      heroCard.addEventListener('pointermove', handlePointerMove);
+      heroCard.addEventListener('pointerleave', resetPointer);
+    }
+
     return () => {
       observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
       if (frame) window.cancelAnimationFrame(frame);
+      if (pointerFrame) window.cancelAnimationFrame(pointerFrame);
+      heroCard?.removeEventListener('pointermove', handlePointerMove);
+      heroCard?.removeEventListener('pointerleave', resetPointer);
     };
   }, []);
 
@@ -295,7 +354,7 @@ export default function Home() {
       <div className="scroll-progress" aria-hidden="true" />
       <nav className="topbar" aria-label="Main navigation">
         <a className="top-brand" href="#home" aria-label="Padalustro Games">
-          <span className="top-logo"><Image src="/images/logo-padalustro.webp" alt="" width={852} height={972} priority /></span>
+          <span className="top-logo"><Image src="/images/logo-padalustro-games.png" alt="" width={625} height={446} priority /></span>
           <span>Padalustro <b>Games</b></span>
         </a>
         <div className="nav-links">
@@ -317,7 +376,10 @@ export default function Home() {
         <div className="hero-grid" aria-hidden="true" />
         <div className="hero-copy">
           <div className="system-label"><span className="live-dot" /> {t.hero.label}</div>
-          <h1>{t.hero.titleA}<br /><em>{t.hero.titleB}</em></h1>
+          <h1>
+            <span className="hero-title-line"><span>{t.hero.titleA}</span></span>
+            <span className="hero-title-line"><em>{t.hero.titleB}</em></span>
+          </h1>
           <p>{t.hero.body}</p>
           <div className="hero-actions">
             <a className="game-button primary" href="#games"><span>▶</span>{t.hero.explore}</a>
@@ -330,31 +392,13 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hero-brand-stage" aria-label="Padalustro Games">
-          <div className="brand-stage-top"><span>PADALUSTRO_GAME_SYSTEM</span><span className="running"><i /> PLAYER_01 ONLINE</span></div>
-          <div className="brand-stage-body">
-            <div className="stage-grid" aria-hidden="true" />
-            <div className="stage-orbit" aria-hidden="true" />
-            <div className="stage-energy" aria-hidden="true" />
-            <div className="stage-particles" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
-            <div className="stage-logo">
-              <Image src="/images/logo-padalustro.webp" alt="Padalustro Games" width={852} height={972} priority />
-            </div>
-            <div className="stage-roster">
-              <span>CHARACTER ROSTER // READY</span>
-              <Image className="stage-cats" src="/images/mewclicker-cats-row.webp" alt="" width={3164} height={820} priority />
-            </div>
-            <Image className="stage-shark" src="/images/pez.png" alt="" width={781} height={482} priority />
-            <Image className="stage-drone" src="/images/dron-helper.webp" alt="" width={1266} height={994} priority />
-            <Image className="stage-disc" src="/images/disco-player.png" alt="" width={568} height={538} priority />
-            <div className="stage-label label-a">STUDIO MODE // ACTIVE</div>
-            <a className="stage-start" href="#games">
-              <span className="stage-start-icon">▶</span>
-              <span className="stage-start-copy"><small>ENTER THE STUDIO</small><strong>PRESS START</strong></span>
-              <b>↘</b>
-            </a>
-          </div>
-          <div className="brand-stage-bottom"><span>INDEPENDENT GAME STUDIO // PARAGUAY</span><span>WEB · MOBILE · PC</span></div>
+        <div className="hero-logo-card" aria-label="Padalustro Games">
+          <span className="hero-card-trace" aria-hidden="true" />
+          <span className="hero-logo-aura" aria-hidden="true" />
+          <span className="hero-logo-sheen" aria-hidden="true" />
+          <span className="hero-logo-mark">
+            <Image src="/images/logo-padalustro-games.png" alt="Padalustro Games" width={625} height={446} priority />
+          </span>
         </div>
       </section>
 
@@ -481,12 +525,12 @@ export default function Home() {
       </section>
 
       <section className="contact" id="contact">
-        <div className="contact-art"><div className="contact-logo"><Image src="/images/logo-padalustro.webp" alt="Padalustro Games" width={852} height={972} /></div><Image src="/images/disco-player.png" className="contact-disc" alt="" width={568} height={538} /></div>
+        <div className="contact-art"><div className="contact-logo"><Image src="/images/logo-padalustro-games.png" alt="Padalustro Games" width={625} height={446} /></div><Image src="/images/disco-player.png" className="contact-disc" alt="" width={568} height={538} /></div>
         <div className="contact-copy"><span>{t.contact.label}</span><h2>{t.contact.titleA}<br />{t.contact.titleB}</h2><p>{t.contact.body}</p><a href="mailto:hola@padalustro.com">hola@padalustro.com <b>↗</b></a></div>
       </section>
 
       <footer>
-        <div className="footer-brand"><span className="top-logo"><Image src="/images/logo-padalustro.webp" alt="" width={852} height={972} /></span><strong>Padalustro Games</strong></div>
+        <div className="footer-brand"><span className="top-logo"><Image src="/images/logo-padalustro-games.png" alt="" width={625} height={446} /></span><strong>Padalustro Games</strong></div>
         <div className="footer-center">
           <p>{t.footer.made}</p>
           <a className="manageopy-credit" href="https://www.manageopy.com/" target="_blank" rel="noreferrer" aria-label={`${t.footer.developed} Manageopy`}>
