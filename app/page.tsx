@@ -214,9 +214,44 @@ const projects = [
 ];
 
 const team = [
-  { name: 'Alejandro Acosta', image: '/images/alejandro-acosta.jpg', accent: 'yellow' },
-  { name: 'Juanse Colina', image: '/images/juanse-colina.jpeg', accent: 'cyan' },
-  { name: 'Francisco Armoa', image: '/images/francisco-armoa.webp', accent: 'coral' },
+  { name: 'Alejandro Acosta', image: '/images/workers/alejandro-acosta.jpg', accent: 'yellow' },
+  { name: 'Juanse Colina', image: '/images/workers/juanse-colina.jpeg', accent: 'cyan' },
+  { name: 'Francisco Armoa', image: '/images/workers/francisco-armoa.webp', accent: 'coral' },
+];
+
+const releasedGames = [
+  {
+    className: 'album-game',
+    category: 'MUSIC TRIVIA',
+    url: 'https://apps.apple.com/us/app/guess-the-album-cover/id6765707853',
+    logo: '/images/quarahy-games/GTAC-logo.png',
+    logoWidth: 1024,
+    logoHeight: 1024,
+    screens: [
+      '/images/quarahy-games/GTAC-Screen1.webp',
+      '/images/quarahy-games/GTAC-Screen2.webp',
+      '/images/quarahy-games/GTAC-Screen3.webp',
+    ],
+    stats: '160+ ALBUMS · 5 GENRES',
+    title: 'Guess The Album Cover',
+    body: 'albumBody' as const,
+  },
+  {
+    className: 'football-game',
+    category: 'SPORTS TRIVIA',
+    url: 'https://apps.apple.com/us/app/guess-the-football-club-2026/id6755687109',
+    logo: '/images/quarahy-games/GTFC-logo.webp',
+    logoWidth: 400,
+    logoHeight: 400,
+    screens: [
+      '/images/quarahy-games/GTFC-Screen1.webp',
+      '/images/quarahy-games/GTFC-Screen2.webp',
+      '/images/quarahy-games/GTFC-Screen3.webp',
+    ],
+    stats: '60+ CLUBS · 1000+ PLAYERS',
+    title: 'Guess The Football Club',
+    body: 'footballBody' as const,
+  },
 ];
 
 export default function Home() {
@@ -231,7 +266,6 @@ export default function Home() {
     const revealSelector = [
       '.section-head > *',
       '.game-info > *',
-      '.release-copy > *',
       '.build-card h3',
       '.build-card > p',
       '.build-tags',
@@ -419,7 +453,7 @@ export default function Home() {
                 <span>CATALOG_09</span>
                 <Image className="mew-cast-front" src="/images/mewclicker-cats-row.webp" alt="MewClicker cat collection" width={3164} height={820} />
               </div>
-              <Image className="mew-drone" src="/images/dron-helper.webp" alt="MewClicker helper drone" width={1266} height={994} />
+              <Image className="mew-drone" src="/images/dron-helper.png" alt="MewClicker helper drone" width={500 } height={500} />
               <span className="art-status mew-art-status"><i /> COLLECTION ONLINE</span>
             </div>
             <div className="game-info">
@@ -466,16 +500,25 @@ export default function Home() {
           <p>{t.released.intro}</p>
         </header>
         <div className="release-grid">
-          <a className="release-card album-game" href="https://apps.apple.com/us/app/guess-the-album-cover/id6765707853" target="_blank" rel="noreferrer">
-            <div className="store-line"><span> APP STORE</span><span>MUSIC TRIVIA</span></div>
-            <div className="album-visual" aria-hidden="true"><i /><i /><i /><div className="vinyl" /></div>
-            <div className="release-copy"><small>160+ ALBUMS · 5 GENRES</small><h3>Guess The Album Cover</h3><p>{t.released.albumBody}</p><span>{t.released.store} ↗</span></div>
-          </a>
-          <a className="release-card football-game" href="https://apps.apple.com/us/app/guess-the-football-club-2026/id6755687109" target="_blank" rel="noreferrer">
-            <div className="store-line"><span> APP STORE</span><span>SPORTS TRIVIA</span></div>
-            <div className="pitch-visual" aria-hidden="true"><i>?</i></div>
-            <div className="release-copy"><small>60+ CLUBS · 1000+ PLAYERS</small><h3>Guess The Football Club</h3><p>{t.released.footballBody}</p><span>{t.released.store} ↗</span></div>
-          </a>
+          {releasedGames.map((game) => (
+            <a className={`release-card ${game.className}`} href={game.url} target="_blank" rel="noreferrer" key={game.title}>
+              <span className="release-category">{game.category}</span>
+              <div className="release-screens" aria-hidden="true">
+                {game.screens.map((screen, index) => (
+                  <Image className="release-screen" src={screen} alt="" width={460} height={995} key={screen} priority={index === 0} />
+                ))}
+              </div>
+              <div className="release-copy">
+                <div className="release-copy-text">
+                  <small>{game.stats}</small>
+                  <h3>{game.title}</h3>
+                  <p>{t.released[game.body]}</p>
+                  <Image className="release-store-badge" src="/images/quarahy-games/appstore-white.svg" alt={t.released.store} width={120} height={40} />
+                </div>
+                <Image className="release-logo" src={game.logo} alt="" width={game.logoWidth} height={game.logoHeight} />
+              </div>
+            </a>
+          ))}
         </div>
       </section>
 
@@ -516,7 +559,6 @@ export default function Home() {
         <div className="team-grid">
           {team.map((person, index) => (
             <article className={`team-card ${person.accent}`} key={person.name}>
-              <div className="player-no">P{index + 1}</div>
               <div className="portrait"><div className="portrait-grid" aria-hidden="true" /><Image src={person.image} alt={person.name} width={668} height={668} /></div>
               <div className="player-name"><span>{t.team.player} {String(index + 1).padStart(2, '0')}</span><h3>{person.name}</h3></div>
             </article>
@@ -526,7 +568,7 @@ export default function Home() {
 
       <section className="contact" id="contact">
         <div className="contact-art"><div className="contact-logo"><Image src="/images/logo-padalustro-games.png" alt="Padalustro Games" width={625} height={446} /></div><Image src="/images/disco-player.png" className="contact-disc" alt="" width={568} height={538} /></div>
-        <div className="contact-copy"><span>{t.contact.label}</span><h2>{t.contact.titleA}<br />{t.contact.titleB}</h2><p>{t.contact.body}</p><a href="mailto:hola@padalustro.com">hola@padalustro.com <b>↗</b></a></div>
+        <div className="contact-copy"><span>{t.contact.label}</span><h2>{t.contact.titleA}<br />{t.contact.titleB}</h2><p>{t.contact.body}</p><a href="mailto:contact@padalustrogames.com">contact@padalustrogames.com <b>↗</b></a></div>
       </section>
 
       <footer>
